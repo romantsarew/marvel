@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+
+  h1 {
+    font-size: 28px;
+    line-height: 33px;
+  }
+
+  b {
+    color: $main-color;
+  }
+
+  ul {
+    display: flex;
+    gap: 8px;
+    font-size: 24px;
+    line-height: 29px;
+    font-weight: 700;
+  }
+
+  a.active {
+    color: $main-color;
+  }
+}

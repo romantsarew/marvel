@@ -1,0 +1,76 @@
+.intro {
+  min-height: 250px;
+  display: flex;
+  box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.25);
+}
+
+.intro__random {
+  max-width: 50%;
+  width: 100%;
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  padding: 35px 40px;
+
+  img {
+    width: 180px;
+    min-height: 180px;
+    object-fit: cover;
+  }
+}
+
+.intro__descr {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  h2 {
+    font-size: 22px;
+    line-height: 26px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 17px;
+  }
+}
+
+.intro__buttons {
+  display: flex;
+  
+  a {
+    margin-right: 30px;
+  }
+}
+
+.intro__static {
+  max-width: 50%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 35px 40px;
+  background-color: #232222;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: "";
+    width: 203px;
+    height: 189px;
+    background-image: url('../../images/intro-hammer.png');
+    background-size: cover;
+    right: -35px;
+    bottom: 14px;
+  }
+
+  p {
+    font-size: 24px;
+    line-height: 29px;
+    color: #fff;
+    font-weight: 700;
+    max-width: 374px;
+    margin-bottom: 30px;
+  }
+}

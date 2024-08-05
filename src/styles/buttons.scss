@@ -1,0 +1,36 @@
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $main-color; /* Темно-красный цвет */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  text-transform: uppercase;
+  clip-path: polygon(10% 0%, 100% 0%, 100% 70%, 90% 100%, -20% 100%);
+  min-height: 38px;
+  min-width: 101px;
+  border: none;
+  width: fit-content;
+  cursor: pointer;
+
+  &--grey {
+    background-color: $grey;
+  }
+
+  &--long {
+    width: 170px;
+  }
+
+  &:hover,
+  &:focus {
+    outline: none;
+    transition: 0.3s ease-out;
+    opacity: 0.7;
+  }
+
+  &:active {
+    transform: scale(90%);
+  }
+}
+
