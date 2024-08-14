@@ -1,3 +1,4 @@
+import Comics from "../comics/comics";
 import Header from "../header/header";
 import HeroBanner from "../hero-banner/hero-banner";
 import Heroes from "../heroes/heroes";
@@ -8,11 +9,12 @@ function App() {
     <div className="app">
       <Header />
       <main>
-        <Intro />
-        <section className="heroes">
+        {/* <Comics /> */}
+        {/* <Intro /> */}
+        {/* <section className="heroes">
           <Heroes />
           <HeroBanner />
-        </section>
+        </section> */}
       </main>
     </div>
   );

@@ -2,6 +2,18 @@
   padding: 50px 0;
   display: flex;
   gap: 25px;
+  position: relative;
+
+  &::after {
+    position: absolute;
+    content: "";
+    width: 467px;
+    height: 372px;
+    bottom: -50px;
+    right: -200px;
+    background-image: url("../../images/hero.png");
+    background-repeat: no-repeat;
+  }
 }
 
 .heroes__choose {
