@@ -1,3 +1,4 @@
+import ComicsData from "../comics-data/comics-data";
 import Comics from "../comics/comics";
 import Header from "../header/header";
 import HeroBanner from "../hero-banner/hero-banner";
@@ -15,6 +16,7 @@ function App() {
           <Heroes />
           <HeroBanner />
         </section> */}
+        {/* <ComicsData /> */}
       </main>
     </div>
   );
