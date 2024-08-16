@@ -2,6 +2,7 @@
   min-height: 250px;
   display: flex;
   box-shadow: 5px 5px 20px 0px rgba(0, 0, 0, 0.25);
+  align-items: center;
 }
 
 .intro__random {
@@ -15,7 +16,7 @@
   img {
     width: 180px;
     min-height: 180px;
-    object-fit: cover;
+    height: 100%;
   }
 }
 
@@ -23,22 +24,30 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  height: 100%;
 
   h2 {
     font-size: 22px;
     line-height: 26px;
     font-weight: 700;
     text-transform: uppercase;
+    margin-bottom: auto;
   }
 
   p {
     font-size: 14px;
     line-height: 17px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
   }
 }
 
 .intro__buttons {
   display: flex;
+  margin-top: auto;
   
   a {
     margin-right: 30px;

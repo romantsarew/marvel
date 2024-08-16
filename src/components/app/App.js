@@ -11,7 +11,7 @@ function App() {
       <Header />
       <main>
         {/* <Comics /> */}
-        {/* <Intro /> */}
+        <Intro />
         {/* <section className="heroes">
           <Heroes />
           <HeroBanner />

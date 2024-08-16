@@ -1,26 +1,54 @@
 import { Component } from 'react';
+import MarvelService from '../../services/MarvelService';
 import './intro'
-import thor from '../../images/intro-thor.jpg';
+import Spinner from '../spinner/spinner'
+import ErrorMessage from '../error/error';
 
 class Intro extends Component {
   constructor(props) {
     super(props)
+    this.updateHero();
+  }
+
+  state = {
+    hero: {},
+    loading: true,
+    error: false
+  }
+
+  marvelService = new MarvelService()
+
+  onHeroLoaded = (hero) => {
+    this.setState({ 
+      hero, 
+      loading: false })
+  }
+
+  onError = () => {
+    this.setState({ 
+      loading: false, 
+      error: true })
+  }
+
+  updateHero = () => {
+    const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
+    this.marvelService
+      .getCharacter(id)
+      .then(this.onHeroLoaded)
+      .catch(this.onError)
   }
 
   render() {
+    const { hero, loading, error } = this.state
+    const errorMessage = error ? <ErrorMessage /> : null
+    const spinner = loading ? <Spinner /> : null
+    const content = !(loading || error) ? <View hero={hero}/> : null
+
     return (
       <section className='intro'>
-        <div className='intro__random'>
-          <img src={thor} width='180' height='180' alt='hero' data-hero-image/>
-          <div className='intro__descr'>
-            <h2 data-hero-name>Thor</h2>
-            <p data-hero-text>As the Norse God of thunder and lightning, Thor wields one of the greatest weapons ever made, the enchanted hammer Mjolnir. While others have described Thor as an over-muscled, oafish imbecile, he's quite smart and compassionate...</p>
-            <div className='intro__buttons'>
-              <a href='#' className='btn btn-red'>Homepage</a>
-              <a href='#' className='btn btn--grey'>Wiki</a>
-            </div>
-          </div>
-        </div>
+        {errorMessage}
+        {spinner}
+        {content}
         <div className='intro__static'>
           <p>Random character for today!<br />
             Do you want to get to know him better?</p>
@@ -30,6 +58,24 @@ class Intro extends Component {
       </section>
     )
   }
+}
+
+const View = ({ hero }) => {
+  const { name, description, thumbnail, homepage, wiki } = hero
+
+  return (
+    <div className='intro__random'>
+      <img src={thumbnail} width='180' height='180' alt='hero' data-hero-image />
+      <div className='intro__descr'>
+        <h2 data-hero-name>{name}</h2>
+        <p data-hero-text>{description}</p>
+        <div className='intro__buttons'>
+          <a href={homepage} className='btn btn-red'>Homepage</a>
+          <a href={wiki} className='btn btn--grey'>Wiki</a>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 export default Intro
