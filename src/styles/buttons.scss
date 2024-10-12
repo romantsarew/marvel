@@ -32,5 +32,15 @@
   &:active {
     transform: scale(90%);
   }
+
+  &:disabled {
+    filter: grayscale(.5);
+    cursor: default;
+  }
+
+  &.is-loading {
+    background-color: rgb(92, 92, 92, 0.3);
+    cursor:not-allowed;
+  }
 }
 

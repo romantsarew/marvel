@@ -7,7 +7,6 @@ import ErrorMessage from '../error/error';
 class Intro extends Component {
   constructor(props) {
     super(props)
-    this.updateHero();
   }
 
   state = {
@@ -18,20 +17,36 @@ class Intro extends Component {
 
   marvelService = new MarvelService()
 
+  componentDidMount() {
+    this.updateHero();
+  }
+
+  componentWillUnmount() {
+  }
+
   onHeroLoaded = (hero) => {
-    this.setState({ 
-      hero, 
-      loading: false })
+    this.setState({
+      hero,
+      loading: false
+    })
+  }
+
+  onHeroLoading = () => {
+    this.setState({
+      loading: true
+    })
   }
 
   onError = () => {
-    this.setState({ 
-      loading: false, 
-      error: true })
+    this.setState({
+      loading: false,
+      error: true
+    })
   }
 
   updateHero = () => {
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000)
+    this.onHeroLoading()
     this.marvelService
       .getCharacter(id)
       .then(this.onHeroLoaded)
@@ -42,7 +57,7 @@ class Intro extends Component {
     const { hero, loading, error } = this.state
     const errorMessage = error ? <ErrorMessage /> : null
     const spinner = loading ? <Spinner /> : null
-    const content = !(loading || error) ? <View hero={hero}/> : null
+    const content = !(loading || error) ? <View hero={hero} /> : null
 
     return (
       <section className='intro'>
@@ -53,7 +68,7 @@ class Intro extends Component {
           <p>Random character for today!<br />
             Do you want to get to know him better?</p>
           <p>Or choose another one</p>
-          <a href='#' className='btn btn-red'>Try it</a>
+          <a href='#' className='btn btn-red' onClick={this.updateHero}>Try it</a>
         </div>
       </section>
     )
@@ -63,9 +78,11 @@ class Intro extends Component {
 const View = ({ hero }) => {
   const { name, description, thumbnail, homepage, wiki } = hero
 
+  const isNotAvailable = thumbnail.includes("not_available");
+
   return (
     <div className='intro__random'>
-      <img src={thumbnail} width='180' height='180' alt='hero' data-hero-image />
+      <img src={thumbnail} width='180' height='180' alt='hero' className={isNotAvailable ? 'not-available' : ''} data-hero-image />
       <div className='intro__descr'>
         <h2 data-hero-name>{name}</h2>
         <p data-hero-text>{description}</p>

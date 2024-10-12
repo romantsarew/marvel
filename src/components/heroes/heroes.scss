@@ -21,6 +21,8 @@
   gap: 25px;
   max-width: 650px;
   width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .heroes__list {
@@ -28,11 +30,14 @@
   flex-direction: column;
   gap: 45px;
   align-items: center;
+  justify-content: center;
 
   ul {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 25px;
+    align-items: center;
+    justify-content: center;
   }
 
   li {
@@ -68,8 +73,14 @@
 
   img {
     max-width: 100%;
+    min-width: 200px;
+    min-height: 200px;
     width: 100%;
     display: flex;
     object-fit: cover;
+
+    &.not-available {
+      object-fit: contain;
+    }
   }
 }
