@@ -106,7 +106,7 @@ class Heroes extends Component {
 
 class View extends Component {
   state = {
-    selectedHeroId: null, // Состояние для хранения активного элемента
+    selectedHeroId: null, 
   };
 
   handleHeroClick = (id) => {
