@@ -16,10 +16,16 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    max-height: fit-content;
+  }
+
+  a {
+    height: 100%;
   }
 
   img {
     max-width: 225px;
+    min-height: 346px;
     max-height: 346px;
   }
 

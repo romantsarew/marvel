@@ -15,6 +15,11 @@
     font-size: 18px;
     line-height: 22px;
     font-weight: 700;
+
+    &:hover,
+    &:focus {
+        color: $main-color;
+    }
   }
 }
 

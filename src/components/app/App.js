@@ -1,45 +1,38 @@
-import { Component } from "react";
-import ComicsData from "../comics-data/comics-data";
-import Comics from "../comics/comics";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Header from "../header/header";
-import HeroBanner from "../hero-banner/hero-banner";
-import Heroes from "../heroes/heroes";
-import Intro from "../intro/intro";
+import { MainPage, ComicsPage, Page404, ComicsData } from "../pages";
 
-class App extends Component {
-  state = {
-    selectedHero: null
-  }
-
-  onHeroSelected = (id) => {
-    this.setState({
-      selectedHero: id
-    })
-  }
-
-  render() {
-    return (
-      <div className="app" >
+const App = () => {
+  return (
+    <Router>
+      <div className="app">
         <Header />
         <main>
-          {/* <Comics /> */}
-          <ErrorBoundary>
-            <Intro />
-          </ErrorBoundary>
-          <section className="heroes">
-            <ErrorBoundary>
-              <Heroes onHeroSelected={this.onHeroSelected} />
-            </ErrorBoundary>
-            <ErrorBoundary>
-              <HeroBanner heroId={this.state.selectedHero} />
-            </ErrorBoundary>
-          </section>
-          {/* <ComicsData /> */}
+          <Routes>
+            <Route
+              path="/comics"
+              element={
+                <ErrorBoundary>
+                  <ComicsPage />
+                </ErrorBoundary>
+              }
+            />
+            <Route
+              path="/comics/:comicId"
+              element={
+                <ErrorBoundary>
+                  <ComicsData />
+                </ErrorBoundary>
+              }
+            />
+            <Route path="/" element={<MainPage />} />
+            <Route path="*" element={<Page404 />}></Route>
+          </Routes>
         </main>
       </div>
-    );
-  }
-}
+    </Router>
+  );
+};
 
 export default App;

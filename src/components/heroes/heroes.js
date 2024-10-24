@@ -1,154 +1,113 @@
-import React, { Component } from "react";
+import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
-import MarvelService from "../../services/MarvelService";
+
+import "./heroes.scss";
 import ErrorMessage from "../error/error";
 import Spinner from "../spinner/spinner";
+import useMarvelService from "../../services/MarvelService";
 
-class Heroes extends Component {
-  state = {
-    heroes: [],
-    loading: true,
-    error: false,
-    newItemLoading: false,
-    offset: 210,
-    heroEnded: false,
-    isLoading: false,
+const HeroList = (props) => {
+  const [heroList, setHeroList] = useState([]);
+  const [newItemLoading, setnewItemLoading] = useState(false);
+  const [offset, setOffset] = useState(210);
+  const [heroEnded, setHeroEnded] = useState(false);
+
+  const { loading, error, getAllCharacters } = useMarvelService();
+
+  useEffect(() => {
+    onRequest(offset, true);
+  }, []);
+
+  const onRequest = (offset, init) => {
+    init ? setnewItemLoading(false) : setnewItemLoading(true);
+    getAllCharacters(offset).then(onHeroListLoaded);
   };
 
-  marvelService = new MarvelService();
-
-  componentDidMount() {
-    this.onRequest();
-    window.addEventListener('scroll', this.onScroll);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('scroll', this.onScroll);
-  }
-
-  onScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 100 &&
-      !this.state.newItemLoading &&
-      !this.state.heroEnded
-    ) {
-      this.onRequest(this.state.offset);
-    }
-  };
-
-  onRequest = (offset) => {
-    this.onHeroesLoading();
-    this.marvelService
-      .getAllCharacters(offset)
-      .then(this.onHeroesLoaded)
-      .catch(this.onError);
-  };
-
-  onHeroesLoading = () => {
-    this.setState({
-      newItemLoading: true,
-      isLoading: true,
-    });
-  };
-
-  onError = () => {
-    this.setState({
-      loading: false,
-      error: true,
-    });
-  };
-
-  onHeroesLoaded = (newHeroes) => {
+  const onHeroListLoaded = (newHeroList) => {
     let ended = false;
-    if (newHeroes < 9) {
+    if (newHeroList.length < 9) {
       ended = true;
     }
 
-    this.setState(({ offset, heroes }) => ({
-      heroes: [...heroes, ...newHeroes],
-      loading: false,
-      newItemLoading: false,
-      offset: offset + 9,
-      heroEnded: ended,
-      isLoading: false,
-    }));
+    setHeroList((heroList) => [...heroList, ...newHeroList]);
+    setnewItemLoading((newItemLoading) => false);
+    setOffset((offset) => offset + 9);
+    setHeroEnded((heroEnded) => ended);
   };
 
-  render() {
-    const { heroes, loading, error, offset, newItemLoading, heroEnded, isLoading } = this.state;
-    const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading || newItemLoading ? <Spinner /> : null;
-    const content = !(loading || error) ? (
-      <View heroes={heroes} onHeroSelected={this.props.onHeroSelected} />
-    ) : null;
+  const itemRefs = useRef([]);
 
-    return (
-      <div className="heroes__choose">
-        <h2 className="visually-hidden">Hero cards</h2>
-        <div className="heroes__list">
-          {spinner}
-          {errorMessage}
-          <ul>{content}</ul>
-          <button
-            type="button"
-            className={isLoading ? "btn btn--long is-loading" : "btn btn--long"}
-            disabled={newItemLoading}
-            style={{ display: heroEnded ? "none" : "block" }}
-            onClick={() => this.onRequest(offset)}
-          >
-            LOAD MORE
-          </button>
-        </div>
-      </div>
-    );
+  const focusOnItem = (id) => {
+    itemRefs.current.forEach((item) => {
+      if (item) {
+        item.classList.remove("char__item_selected");
+      }
+    });
+
+    if (itemRefs.current[id]) {
+      itemRefs.current[id].classList.add("char__item_selected");
+      itemRefs.current[id].focus();
+    }
+  };
+
+  function renderItems(arr) {
+    const items = arr.map((item, i) => {
+      let imgStyle = { objectFit: "cover" };
+      if (
+        item.thumbnail ===
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+      ) {
+        imgStyle = { objectFit: "unset" };
+      }
+
+      return (
+        <li
+          className="char__item"
+          tabIndex={0}
+          ref={(el) => (itemRefs.current[i] = el)}
+          key={item.id}
+          onClick={() => {
+            props.onHeroSelected(item.id);
+            focusOnItem(i);
+          }}
+          onKeyPress={(e) => {
+            if (e.key === " " || e.key === "Enter") {
+              props.onHeroSelected(item.id);
+              focusOnItem(i);
+            }
+          }}
+        >
+          <img src={item.thumbnail} alt={item.name} style={imgStyle} />
+          <div className="char__name">{item.name}</div>
+        </li>
+      );
+    });
+    return <ul className="char__grid">{items}</ul>;
   }
-}
+  const items = renderItems(heroList);
 
-class View extends Component {
-  state = {
-    selectedHeroId: null, 
-  };
+  const errorMessage = error ? <ErrorMessage /> : null;
+  const spinner = loading && !newItemLoading ? <Spinner /> : null;
 
-  handleHeroClick = (id) => {
-    this.setState({ selectedHeroId: id });
-    this.props.onHeroSelected(id);
-  };
+  return (
+    <div className="char__list">
+      {errorMessage}
+      {spinner}
+      {items}
+      <button
+        className="btn btn--long"
+        disabled={newItemLoading}
+        style={{ display: heroEnded ? "none" : "flex" }}
+        onClick={() => onRequest(offset)}
+      >
+        <div className="inner">load more</div>
+      </button>
+    </div>
+  );
+};
 
-  handleHeroFocus = (id) => {
-    this.setState({ selectedHeroId: id });
-  };
-
-  render() {
-    const { heroes } = this.props;
-    const { selectedHeroId } = this.state;
-
-    return (
-      <>
-        {heroes.map((hero) => {
-          const { name, thumbnail, id } = hero;
-
-          const liClass = id === selectedHeroId ? "active" : "";
-
-          return (
-            <li
-              key={id}
-              className={liClass}
-              onClick={() => this.handleHeroClick(id)}
-              onFocus={() => this.handleHeroFocus(id)} 
-              tabIndex="0"
-            >
-              <img src={thumbnail} width={200} height={200} alt={name} />
-              <div>{name}</div>
-            </li>
-          );
-        })}
-      </>
-    );
-  }
-}
-
-Heroes.propTypes = {
+HeroList.propTypes = {
   onHeroSelected: PropTypes.func.isRequired,
 };
 
-export default Heroes;
+export default HeroList;
