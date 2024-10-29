@@ -1,7 +1,13 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Header from "../header/header";
-import { MainPage, ComicsPage, Page404, ComicsData } from "../pages";
+import { lazy, Suspense } from "react";
+import Spinner from "../spinner/spinner";
+
+const Page404 = lazy(() => import("../pages/404"));
+const MainPage = lazy(() => import("../pages/MainPage"));
+const ComicsPage = lazy(() => import("../pages/ComicsPage"));
+const DataPage = lazy(() => import("../pages/DataPage")); // Универсальный компонент
 
 const App = () => {
   return (
@@ -9,26 +15,38 @@ const App = () => {
       <div className="app">
         <Header />
         <main>
-          <Routes>
-            <Route
-              path="/comics"
-              element={
-                <ErrorBoundary>
-                  <ComicsPage />
-                </ErrorBoundary>
-              }
-            />
-            <Route
-              path="/comics/:comicId"
-              element={
-                <ErrorBoundary>
-                  <ComicsData />
-                </ErrorBoundary>
-              }
-            />
-            <Route path="/" element={<MainPage />} />
-            <Route path="*" element={<Page404 />}></Route>
-          </Routes>
+          <Suspense fallback={<Spinner />}>
+            <Routes>
+              <Route path="/" element={<MainPage />} />
+              <Route
+                path="/comics"
+                element={
+                  <ErrorBoundary>
+                    <ComicsPage />
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="/comics/:id"
+                element={
+                  <ErrorBoundary>
+                    <DataPage type="comic" />{" "}
+                    {}
+                  </ErrorBoundary>
+                }
+              />
+              <Route
+                path="/hero/:id"
+                element={
+                  <ErrorBoundary>
+                    <DataPage type="hero" />{" "}
+                    {}
+                  </ErrorBoundary>
+                }
+              />
+              <Route path="*" element={<Page404 />} />
+            </Routes>
+          </Suspense>
         </main>
       </div>
     </Router>

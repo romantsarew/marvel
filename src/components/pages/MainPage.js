@@ -4,6 +4,7 @@ import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Heroes from "../heroes/heroes";
 import Intro from "../intro/intro";
 import HeroBanner from "../hero-banner/hero-banner";
+import HeroSearch from "../hero-search/hero-search";
 
 const MainPage = () => {
   const [selectedHero, setHero] = useState(null);
@@ -22,11 +23,14 @@ const MainPage = () => {
           <Heroes onHeroSelected={onHeroSelected} />
         </ErrorBoundary>
         <ErrorBoundary>
-          <HeroBanner heroId={selectedHero} />
+          <div className="heroes__side">
+            <HeroBanner heroId={selectedHero} />
+            <HeroSearch />
+          </div>
         </ErrorBoundary>
       </section>
     </>
   );
 };
 
-export default MainPage
+export default MainPage;

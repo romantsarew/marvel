@@ -1,4 +1,4 @@
-.comics__data {
+.data {
   display: flex;
   gap: 50px;
   justify-content: space-between;
@@ -21,9 +21,15 @@
         color: $main-color;
     }
   }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 }
 
-.comics__text {
+.data__text {
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -46,5 +52,15 @@
     line-height: 29px;
     font-weight: 700;
     color: #9f0013;
+  }
+}
+
+.data__links {
+  display: flex;
+  gap: 24px;
+
+  a:hover,
+  a:focus {
+      color: #ffffff;
   }
 }

@@ -1,7 +1,7 @@
 .heroes__info {
   max-width: 425px;
   width: 100%;
-  min-height: 100%;
+  min-height: fit-content;
   display: flex;
   flex-direction: column;
   gap: 15px;

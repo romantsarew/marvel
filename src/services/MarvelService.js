@@ -20,6 +20,12 @@ const useMarvelService = () => {
     return _transformHero(res.data.results[0]);
   };
 
+  const getCharacterByName = async (name) => {
+    const res = await request(`${_apiBase}characters?name=${name}&${_apiKey}`)
+    console.log(res.data.results[0])
+    return _transformHero(res.data.results[0])
+  }
+
   const _transformHero = (hero) => {
     return {
       id: hero.id,
@@ -27,7 +33,7 @@ const useMarvelService = () => {
       description:
         hero.description ||
         "unfortunatly, this hero still hasnt his own description...",
-      thumbnail: hero.thumbnail.path + "." + hero.thumbnail.extension,
+      thumbnail: hero.thumbnail.path + "." + hero.thumbnail.extension || '',
       homepage: hero.urls[0].url,
       wiki: hero.urls[1].url,
       comics: hero.comics.items.slice(0, 10),
@@ -68,6 +74,7 @@ const useMarvelService = () => {
     clearError,
     getAllComics,
     getComicsId,
+    getCharacterByName
   };
 };
 

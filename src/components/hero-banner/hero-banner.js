@@ -4,13 +4,12 @@ import ErrorMessage from "../error/error";
 import Skeleton from "../skeleton/skeleton";
 import Spinner from "../spinner/spinner";
 import useMarvelService from "../../services/MarvelService";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const HeroBanner = (props) => {
-  const { comicsid } = useParams();
   const [hero, setHero] = useState(null);
 
-  const { loading, error, getCharacter, clearError, getComicsId } =
+  const { loading, error, getCharacter, clearError } =
     useMarvelService();
 
   useEffect(() => {

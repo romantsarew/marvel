@@ -26,9 +26,9 @@ const ComicsList = () => {
     }
 
     setComicsList((comicsList) => [...comicsList, ...newComicsList]);
-    setnewItemLoading((newItemLoading) => false);
+    setnewItemLoading((newItemLoading) => newItemLoading = false);
     setOffset((offset) => offset + 8);
-    setComicsEnded((comicsEnded) => ended);
+    setComicsEnded((comicsEnded) => comicsEnded = ended);
   };
 
   function renderItems(arr) {

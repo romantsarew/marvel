@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import PropTypes from "prop-types";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import "./heroes.scss";
 import ErrorMessage from "../error/error";
@@ -13,6 +14,8 @@ const HeroList = (props) => {
   const [heroEnded, setHeroEnded] = useState(false);
 
   const { loading, error, getAllCharacters } = useMarvelService();
+
+  const itemRefs = useRef([]); // Создаем рефы заранее
 
   useEffect(() => {
     onRequest(offset, true);
@@ -30,12 +33,10 @@ const HeroList = (props) => {
     }
 
     setHeroList((heroList) => [...heroList, ...newHeroList]);
-    setnewItemLoading((newItemLoading) => false);
+    setnewItemLoading(false);
     setOffset((offset) => offset + 9);
-    setHeroEnded((heroEnded) => ended);
+    setHeroEnded(ended);
   };
-
-  const itemRefs = useRef([]);
 
   const focusOnItem = (id) => {
     itemRefs.current.forEach((item) => {
@@ -61,29 +62,37 @@ const HeroList = (props) => {
       }
 
       return (
-        <li
-          className="char__item"
-          tabIndex={0}
-          ref={(el) => (itemRefs.current[i] = el)}
+        <CSSTransition
           key={item.id}
-          onClick={() => {
-            props.onHeroSelected(item.id);
-            focusOnItem(i);
-          }}
-          onKeyPress={(e) => {
-            if (e.key === " " || e.key === "Enter") {
+          timeout={300}
+          classNames="hero"
+        >
+          <li
+            ref={(el) => {
+              itemRefs.current[i] = el; // Используем реф для каждого элемента
+            }}
+            className="char__item"
+            tabIndex={0}
+            onClick={() => {
               props.onHeroSelected(item.id);
               focusOnItem(i);
-            }
-          }}
-        >
-          <img src={item.thumbnail} alt={item.name} style={imgStyle} />
-          <div className="char__name">{item.name}</div>
-        </li>
+            }}
+            onKeyPress={(e) => {
+              if (e.key === " " || e.key === "Enter") {
+                props.onHeroSelected(item.id);
+                focusOnItem(i);
+              }
+            }}
+          >
+            <img src={item.thumbnail} alt={item.name} style={imgStyle} />
+            <div className="char__name">{item.name}</div>
+          </li>
+        </CSSTransition>
       );
     });
-    return <ul className="char__grid">{items}</ul>;
+    return <TransitionGroup component="ul" className="char__grid">{items}</TransitionGroup>;
   }
+
   const items = renderItems(heroList);
 
   const errorMessage = error ? <ErrorMessage /> : null;
