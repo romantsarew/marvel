@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 import Header from "../header/header";
 import { lazy, Suspense } from "react";
@@ -11,7 +11,7 @@ const DataPage = lazy(() => import("../pages/DataPage")); // Универсал�
 
 const App = () => {
   return (
-    <Router>
+    <Router basename="/">
       <div className="app">
         <Header />
         <main>
@@ -30,8 +30,7 @@ const App = () => {
                 path="/comics/:id"
                 element={
                   <ErrorBoundary>
-                    <DataPage type="comic" />{" "}
-                    {}
+                    <DataPage type="comic" /> {}
                   </ErrorBoundary>
                 }
               />
@@ -39,8 +38,7 @@ const App = () => {
                 path="/hero/:id"
                 element={
                   <ErrorBoundary>
-                    <DataPage type="hero" />{" "}
-                    {}
+                    <DataPage type="hero" /> {}
                   </ErrorBoundary>
                 }
               />

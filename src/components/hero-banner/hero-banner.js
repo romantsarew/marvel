@@ -9,8 +9,7 @@ import { NavLink } from "react-router-dom";
 const HeroBanner = (props) => {
   const [hero, setHero] = useState(null);
 
-  const { loading, error, getCharacter, clearError } =
-    useMarvelService();
+  const { loading, error, getCharacter, clearError } = useMarvelService();
 
   useEffect(() => {
     updateHero();
@@ -46,7 +45,7 @@ const HeroBanner = (props) => {
 
 const View = ({ hero }) => {
   const { name, description, thumbnail, homepage, wiki, comics } = hero;
-  
+
   return (
     <>
       <div className="heroes__top">
@@ -64,13 +63,18 @@ const View = ({ hero }) => {
       <p>{description}</p>
       <h4>Comics:</h4>
       <ul>
-        {comics.length === 0
-          ? (<p>Unfortunately, we don't have data</p>)
-          : comics.map((item, i) => (
-              <NavLink to={`/comics/${item.resourceURI.match(/\d+$/)[0]}`} key={i}>
-                {item.name}
-              </NavLink>
-            ))}
+        {comics.length === 0 ? (
+          <p>Unfortunately, we don't have data</p>
+        ) : (
+          comics.map((item, i) => (
+            <NavLink
+              to={`/comics/${item.resourceURI.match(/\d+$/)[0]}`}
+              key={i}
+            >
+              {item.name}
+            </NavLink>
+          ))
+        )}
       </ul>
     </>
   );

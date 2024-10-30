@@ -4,6 +4,7 @@ import banner from "../../images/banner.jpg";
 import useMarvelService from "../../services/MarvelService";
 import ErrorMessage from "../error/error";
 import Spinner from "../spinner/spinner";
+import { Helmet } from "react-helmet";
 
 const DataPage = ({ type }) => {
   const { id } = useParams();
@@ -68,6 +69,10 @@ const View = ({ data, type }) => {
     const { title, description, language, pageCount, thumbnail, price } = data;
     return (
       <>
+        <Helmet>
+          <meta name="description" content={`${title} comics book`} />
+          <title>{title}</title>
+        </Helmet>
         <img src={thumbnail} alt={title} />
         <div className="data__text">
           <h1>{title}</h1>
